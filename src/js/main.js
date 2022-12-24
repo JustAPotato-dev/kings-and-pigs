@@ -1,11 +1,17 @@
 import Sprite from './objects/Sprite.js'
 import Player from './objects/Player.js'
 import { keysPressed, addEventListener } from './features/eventListener.js'
+import { collisionsLevel1 } from './data/collisions.js'
+import parse2D from './utils/parse2D.js'
+import createObjectsFrom2D from './utils/createObjectsFrom2D.js'
 
 const canvas = document.querySelector('canvas')
 const context = canvas.getContext('2d')
 canvas.width = 64 * 16 // 1024
 canvas.height = 64 * 9 // 576
+
+const parsedCollisions = collisionsLevel1.parse2D()
+const collisionBlocks = parsedCollisions.createObjectsFrom2D()
 
 const backgroundLevel1 = new Sprite({
   position: { x: 0, y: 0 },
@@ -16,6 +22,7 @@ const player = new Player()
 
 function animate() {
   backgroundLevel1.draw(context)
+  collisionBlocks.forEach((block) => block.draw(context))
 
   player.velocity.x = 0
   if (keysPressed.a) player.velocity.x = -4
