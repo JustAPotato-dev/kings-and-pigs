@@ -12,9 +12,11 @@ export default class Player {
 
     this.width = 100
     this.height = 100
+
     this.sides = {
       bottom: this.position.y + this.height,
     }
+
     this.gravity = 1
   }
 
@@ -24,12 +26,15 @@ export default class Player {
   }
 
   update(canvasHeight) {
+    this.position.x += this.velocity.x
     this.position.y += this.velocity.y
+    this.sides.bottom = this.position.y + this.height
 
     // above bottom of canvas
     if (this.sides.bottom + this.velocity.y < canvasHeight) {
       this.velocity.y += this.gravity
-      this.sides.bottom = this.position.y + this.height
-    } else this.velocity.y = 0
+    } else {
+      this.velocity.y = 0
+    }
   }
 }
