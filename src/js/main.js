@@ -1,3 +1,4 @@
+import Sprite from './objects/Sprite.js'
 import Player from './objects/Player.js'
 import { keysPressed, addEventListener } from './features/eventListener.js'
 
@@ -6,11 +7,15 @@ const context = canvas.getContext('2d')
 canvas.width = 64 * 16 // 1024
 canvas.height = 64 * 9 // 576
 
+const backgroundLevel1 = new Sprite({
+  position: { x: 0, y: 0 },
+  imageSrc: './assets/img/backgrounds/level1.png',
+})
+
 const player = new Player()
 
 function animate() {
-  context.fillStyle = 'white'
-  context.fillRect(0, 0, canvas.width, canvas.height)
+  backgroundLevel1.draw(context)
 
   player.velocity.x = 0
   if (keysPressed.a) player.velocity.x = -4
