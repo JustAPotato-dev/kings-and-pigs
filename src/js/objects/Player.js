@@ -1,5 +1,8 @@
-export default class Player {
-  constructor({ collisionBlocks = [] }) {
+import Sprite from './Sprite.js'
+
+export default class Player extends Sprite {
+  constructor({ collisionBlocks = [], imageSrc, frameRate }) {
+    super({ imageSrc, frameRate })
     this.position = {
       x: 200,
       y: 200,
@@ -10,9 +13,6 @@ export default class Player {
       y: 0,
     }
 
-    this.width = 25
-    this.height = 25
-
     this.sides = {
       bottom: this.position.y + this.height,
     }
@@ -20,11 +20,6 @@ export default class Player {
     this.gravity = 1
 
     this.collisionBlocks = collisionBlocks
-  }
-
-  draw(context) {
-    context.fillStyle = 'red'
-    context.fillRect(this.position.x, this.position.y, this.width, this.height)
   }
 
   update() {

@@ -1,16 +1,39 @@
 export default class Sprite {
-  constructor({ position, imageSrc }) {
+  constructor({ position, imageSrc, frameRate = 1 }) {
     this.position = position
     this.image = new Image()
     this.image.onload = () => {
       this.loaded = true
+      this.width = this.image.width / frameRate
+      this.height = this.image.height
     }
     this.image.src = imageSrc
     this.loaded = false
+    this.frameRate = frameRate
+    this.currentFrame = 0
+    this.elapsedFrames = 0
+    this.frameBuffer = 2
   }
 
   draw(context) {
     if (!this.loaded) return
-    context.drawImage(this.image, this.position.x, this.position.y)
+    const cropbox = {
+      position: {
+        x: this.width * this.currentFrame,
+        y: 0,
+      },
+      width: this.width,
+      height: this.height,
+    }
+    context.drawImage(this.image, cropbox.position.x, cropbox.position.y, cropbox.width, cropbox.height, this.position.x, this.position.y, this.width, this.height)
+
+    this.updateFrames()
+  }
+
+  updateFrames() {
+    this.elapsedFrames++
+
+    if (this.elapsedFrames % this.frameBuffer === 0) this.currentFrame++
+    if (this.currentFrame >= this.frameRate) this.currentFrame = 0
   }
 }
