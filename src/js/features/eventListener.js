@@ -4,9 +4,11 @@ export const keysPressed = {
   s: false,
 }
 
+let keydownHandler
+
 export function addEventListener(window, player, doors) {
-  window.addEventListener("keydown", (event) => {
-    if(player.preventInput) return
+  window.addEventListener("keydown", keydownHandler = (event) => {
+    if (player.preventInput) return
     switch (event.key) {
       case "w":
         for (let i = 0; i < doors.length; i++) {
@@ -20,7 +22,7 @@ export function addEventListener(window, player, doors) {
           ) {
             player.velocity.x = 0
             player.velocity.y = 0
-            player.preventInput = true;
+            player.preventInput = true
             player.switchSprite("enterDoor")
             door.play()
             return
@@ -48,4 +50,8 @@ export function addEventListener(window, player, doors) {
         break
     }
   })
+}
+
+export function removeKeydownEventListener(window) {
+  window.removeEventListener("keydown", keydownHandler)
 }

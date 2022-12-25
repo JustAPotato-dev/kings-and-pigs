@@ -47,6 +47,7 @@ export default class Sprite {
 
   updateFrames() {
     if (!this.autoPlay) return
+
     this.elapsedFrames++
 
     if (this.elapsedFrames % this.frameBuffer === 0) {
@@ -54,6 +55,13 @@ export default class Sprite {
         this.currentFrame++
       } else if (this.loop) {
         this.currentFrame = 0
+      }
+    }
+
+    if (this.currentAnimation?.onComplete) {
+      if (this.currentFrame === this.frameRate - 1 && !this.currentAnimation.isActive) {
+        this.currentAnimation.onComplete()
+        this.currentAnimation.isActive = true
       }
     }
   }

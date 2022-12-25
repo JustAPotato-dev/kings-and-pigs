@@ -22,11 +22,7 @@ export default class Player extends Sprite {
     this.collisionBlocks = collisionBlocks
   }
 
-  update(context) {
-    // This is for debugging purposes, to see the player's hitbox
-    // context.fillStyle = 'rgba(0, 0, 255, 0.5)'
-    // context.fillRect(this.position.x, this.position.y, this.width, this.height)
-
+  update() {
     this.position.x += this.velocity.x
 
     this.updateHitbox()
@@ -68,6 +64,7 @@ export default class Player extends Sprite {
     this.frameRate = this.animations[name].frameRate
     this.frameBuffer = this.animations[name].frameBuffer
     this.loop = this.animations[name].loop
+    this.currentAnimation = this.animations[name]
   }
 
   updateHitbox() {
