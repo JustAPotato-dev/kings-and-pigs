@@ -33,7 +33,7 @@ function animate() {
   else if (keysPressed.d) player.velocity.x = 4
 
   player.draw(context)
-  player.update()
+  player.update(context)
 
   requestAnimationFrame(animate)
 }
