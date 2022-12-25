@@ -1,8 +1,8 @@
 export default class Player {
-  constructor() {
+  constructor({ collisionBlocks = [] }) {
     this.position = {
-      x: 100,
-      y: 100,
+      x: 200,
+      y: 200,
     }
 
     this.velocity = {
@@ -10,14 +10,16 @@ export default class Player {
       y: 0,
     }
 
-    this.width = 100
-    this.height = 100
+    this.width = 25
+    this.height = 25
 
     this.sides = {
       bottom: this.position.y + this.height,
     }
 
     this.gravity = 1
+
+    this.collisionBlocks = collisionBlocks
   }
 
   draw(context) {
@@ -25,16 +27,60 @@ export default class Player {
     context.fillRect(this.position.x, this.position.y, this.width, this.height)
   }
 
-  update(canvasHeight) {
+  update() {
     this.position.x += this.velocity.x
-    this.position.y += this.velocity.y
-    this.sides.bottom = this.position.y + this.height
+    this.checkForHorizontalCollisions()
 
-    // above bottom of canvas
-    if (this.sides.bottom + this.velocity.y < canvasHeight) {
-      this.velocity.y += this.gravity
-    } else {
-      this.velocity.y = 0
-    }
+    this.applyGravity()
+    this.checkForVerticalCollisions()
+  }
+
+  applyGravity() {
+    this.velocity.y += this.gravity
+    this.position.y += this.velocity.y
+  }
+
+  checkForHorizontalCollisions() {
+    this.collisionBlocks.forEach((block) => {
+      if (
+        this.position.x <= block.position.x + block.width &&
+        this.position.x + this.width >= block.position.x &&
+        this.position.y <= block.position.y + block.height &&
+        this.position.y + this.height >= block.position.y
+      ) {
+        if (this.velocity.x < 0) {
+          this.position.x = block.position.x + block.width + 0.01
+          return
+        }
+
+        if (this.velocity.x > 0) {
+          this.position.x = block.position.x - this.width - 0.01
+          return
+        }
+      }
+    })
+  }
+
+  checkForVerticalCollisions() {
+    this.collisionBlocks.forEach((block) => {
+      if (
+        this.position.x <= block.position.x + block.width &&
+        this.position.x + this.width >= block.position.x &&
+        this.position.y <= block.position.y + block.height &&
+        this.position.y + this.height >= block.position.y
+      ) {
+        if (this.velocity.y < 0) {
+          this.velocity.y = 0
+          this.position.y = block.position.y + block.height + 0.01
+          return
+        }
+
+        if (this.velocity.y > 0) {
+          this.velocity.y = 0
+          this.position.y = block.position.y - this.height - 0.01
+          return
+        }
+      }
+    })
   }
 }

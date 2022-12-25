@@ -18,7 +18,9 @@ const backgroundLevel1 = new Sprite({
   imageSrc: './assets/img/backgrounds/level1.png',
 })
 
-const player = new Player()
+const player = new Player({
+  collisionBlocks,
+})
 
 function animate() {
   backgroundLevel1.draw(context)
@@ -29,7 +31,7 @@ function animate() {
   else if (keysPressed.d) player.velocity.x = 4
 
   player.draw(context)
-  player.update(canvas.height)
+  player.update()
 
   requestAnimationFrame(animate)
 }
